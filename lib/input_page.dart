@@ -72,17 +72,27 @@ class _InputPageState extends State<InputPage> {
                   label: 'HEIGTH',
                   value: height.toString(),
                   unit: 'CM.',
-                  inputChild: Slider(
-                    min: kMinHeight.toDouble(),
-                    max: kMaxHeight.toDouble(),
-                    activeColor: Color(0xFFFFFFFF),
-                    inactiveColor: Color(0xFF888993),
-                    value: height.toDouble(),
-                    onChanged: (double newValue) {
-                      setState(() {
-                        height = newValue.round();
-                      });
-                    },
+                  inputChild: SliderTheme(
+                    data: SliderTheme.of(context).copyWith(
+                      inactiveTrackColor: Color(0xFF888993),
+                      activeTrackColor: Color(0xFFFFFFFF),
+                      overlayShape:
+                          RoundSliderOverlayShape(overlayRadius: 30.0),
+                      thumbShape:
+                          RoundSliderThumbShape(enabledThumbRadius: 15.0),
+                      thumbColor: Color(0xFFEB1555),
+                      overlayColor: Color(0x29EB1555),
+                    ),
+                    child: Slider(
+                      min: kMinHeight.toDouble(),
+                      max: kMaxHeight.toDouble(),
+                      value: height.toDouble(),
+                      onChanged: (double newValue) {
+                        setState(() {
+                          height = newValue.round();
+                        });
+                      },
+                    ),
                   ),
                 ),
               ),

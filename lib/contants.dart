@@ -14,4 +14,4 @@ const kTextNumberStyle = TextStyle(
 );
 
 const kMinHeight = 120;
-const kMaxHeight = 250;
+const kMaxHeight = 230;
