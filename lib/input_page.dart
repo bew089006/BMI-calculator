@@ -4,6 +4,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'reuseable_card.dart';
 import 'icon_content.dart';
 import 'contants.dart';
+import 'bottom_button.dart';
+import 'calculator_bmi.dart';
+import 'result_page.dart';
 
 enum Gender { male, female }
 
@@ -15,6 +18,8 @@ class InputPage extends StatefulWidget {
 class _InputPageState extends State<InputPage> {
   Gender selectedGender;
   int height = kMinHeight;
+  int weight = 60;
+  int age = 15;
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +74,7 @@ class _InputPageState extends State<InputPage> {
               child: ReuseableCard(
                 color: kActiveReuseableColor,
                 cardChild: ReuseableInput(
-                  label: 'HEIGTH',
+                  label: 'HEIGHT',
                   value: height.toString(),
                   unit: 'CM.',
                   inputChild: SliderTheme(
@@ -107,9 +112,30 @@ class _InputPageState extends State<InputPage> {
                       color: kActiveReuseableColor,
                       cardChild: ReuseableInput(
                         label: 'WEIGHT',
-                        value: '72',
+                        value: weight.toString(),
                         unit: 'KG.',
-                        inputChild: Text('eiei'),
+                        inputChild: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            RoundIconButton(
+                              iconData: FontAwesomeIcons.minus,
+                              onPress: () {
+                                setState(() {
+                                  weight -= 1;
+                                });
+                              },
+                            ),
+                            SizedBox(width: 10),
+                            RoundIconButton(
+                              iconData: FontAwesomeIcons.plus,
+                              onPress: () {
+                                setState(() {
+                                  weight += 1;
+                                });
+                              },
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -119,28 +145,53 @@ class _InputPageState extends State<InputPage> {
                       color: kActiveReuseableColor,
                       cardChild: ReuseableInput(
                         label: 'AGE',
-                        value: '24',
+                        value: age.toString(),
                         unit: '',
-                        inputChild: Text('eiei'),
+                        inputChild: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            RoundIconButton(
+                              iconData: FontAwesomeIcons.minus,
+                              onPress: () {
+                                setState(() {
+                                  age -= 1;
+                                });
+                              },
+                            ),
+                            SizedBox(width: 10),
+                            RoundIconButton(
+                              iconData: FontAwesomeIcons.plus,
+                              onPress: () {
+                                setState(() {
+                                  age += 1;
+                                });
+                              },
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
                 ],
               ),
             ),
-            Container(
-              height: 80,
-              color: Colors.red,
-              width: double.infinity,
-              child: Center(
-                child: Text(
-                  'Calutator Your BMI.',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
+            BottomButton(
+              label: 'CALCULATE YOUR BMI',
+              onPress: () {
+                CalculatorBMI calc =
+                    CalculatorBMI(height: height, weight: weight);
+
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ResultPage(
+                      bmiScore: calc.getScoreBMI(),
+                      resultTitle: calc.getResultTitle(),
+                      resultDescription: calc.getResultDescription(),
+                    ),
                   ),
-                ),
-              ),
+                );
+              },
             ),
           ],
         ),
@@ -189,6 +240,30 @@ class ReuseableInput extends StatelessWidget {
         ),
         inputChild
       ],
+    );
+  }
+}
+
+class RoundIconButton extends StatelessWidget {
+  RoundIconButton({@required this.iconData, @required this.onPress});
+
+  final IconData iconData;
+  final Function onPress;
+
+  @override
+  Widget build(BuildContext context) {
+    return RawMaterialButton(
+      child: Icon(
+        iconData,
+      ),
+      onPressed: onPress,
+      constraints: BoxConstraints.tightFor(
+        width: 56,
+        height: 56,
+      ),
+      elevation: 6.0,
+      fillColor: Color(0xFFEB1555),
+      shape: CircleBorder(),
     );
   }
 }
